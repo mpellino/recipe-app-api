@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
+# Docker Compose Configuration Explanation:
+#
+# - `version: "3.9"`: Specifies the version of Docker Compose syntax being used, ensuring compatibility.
+#
+# - `services:`: Defines a set of services (containers) to be managed by Docker Compose.
+#
+# - `app:`: The name of the service defined in this configuration, which corresponds to the Dockerfile service name.
+#
+#   - `build:`: Specifies how to build the Docker image for this service.
+#     - `context: .`: Sets the build context to the current directory (where the Dockerfile is located).
+#
+#   - `ports:`: Maps the container's port 8000 to the host machine's port 8000, enabling access to the Django app.
+#     - `"8000:8000"`: Exposes port 8000 on the host machine and forwards traffic to port 8000 in the container.
+#
+#   - `volumes:`: Mounts a host directory (./app) as a volume inside the container (/app).
+#     - `./app:/app`: Syncs changes made locally (in ./app) with the container's /app directory, allowing live updates.
+#
+#   - `command:`: Overrides the default command specified in the Dockerfile, running Django's development server.
+#     - `sh -c "python manage.py runserver 0.0.0.0:8000"`: Starts Django's development server, binding to all interfaces (0.0.0.0) on port 8000.
+#
+# To build and run the Docker container using this configuration, execute:
+#   docker-compose build  # Builds the Docker image using the defined Dockerfile and configuration.
+#   docker-compose up     # Starts the Docker container based on the configured services.
