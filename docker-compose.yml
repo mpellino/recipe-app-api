@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        - DEV=true # this overwrite the Dockerfile arg=false when we run it with this compose configuration. Basically, by default we are not running it in dev mode
+        - DEV=true 
     ports:
       - "8000:8000"
     volumes:
@@ -24,7 +24,8 @@ services:
 #   - `build:`: Specifies how to build the Docker image for this service.
 #     - `context: .`: Sets the build context to the current directory (where the Dockerfile is located).
 #     - Sets: the build argument to be in development mode.
-#   - `ports:`: Maps the container's port 8000 to the host machine's port 8000, enabling access to the Django app.
+#     DEV=true, this overwrite the Dockerfile arg=false when we run it with this compose configuration. Basically, by default we are not running it in dev mode   
+#- `ports:`: Maps the container's port 8000 to the host machine's port 8000, enabling access to the Django app.
 #     - `"8000:8000"`: Exposes port 8000 on the host machine and forwards traffic to port 8000 in the container.
 #
 #   - `volumes:`: Mounts a host directory (./app) as a volume inside the container (/app).
