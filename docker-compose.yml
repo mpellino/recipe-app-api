@@ -1,4 +1,6 @@
-version: "3.9"
+vnd: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    environmentersion: "3.9"
 
 services:
   app:
@@ -10,11 +12,40 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+    comma:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+
+volumes:
+  dev-db-data:
 
 # Docker Compose Configuration Explanation:
-#
+
+
+# This `docker-compose.yml` file defines two services: `app` and `db`.
+# The `app` service is built from the current directory and has an environment 
+# variable `DEV` set to `true`. It exposes port 8000 and mounts the local `./app` 
+# directory to the `/app` directory in the container. It also depends on the `db` service.
+# The `db` service uses the `postgres:13-alpine` image and mounts the named volume 
+# `dev-db-data` to the `/var/lib/postgres/data` directory in the container. 
+# It also sets a few environment variables for the PostgreSQL database.
+# The `volumes` section defines the named volume `dev-db-data` used by the `db` service.
+
+
 # - `version: "3.9"`: Specifies the version of Docker Compose syntax being used, ensuring compatibility.
 #
 # - `services:`: Defines a set of services (containers) to be managed by Docker Compose.
@@ -33,6 +64,27 @@ services:
 #
 #   - `command:`: Overrides the default command specified in the Dockerfile, running Django's development server.
 #     - `sh -c "python manage.py runserver 0.0.0.0:8000"`: Starts Django's development server, binding to all interfaces (0.0.0.0) on port 8000.
+#
+#   - `environment:`: Sets environment variables used within the app service.
+#     - `DB_HOST=db`: Specifies the hostname for the database service.
+#     - `DB_NAME=devdb`: Specifies the database name used by the app.
+#     - `DB_USER=devuser`: Specifies the database username used by the app.
+#     - `DB_PASS=changeme`: Specifies the database password used by the app.
+#
+#   - `depends_on:`: Establishes service dependencies, ensuring the db service starts before the app service.
+#     - `db`: Ensures the database service (db) is started before the app service.
+#
+# - `db:`: Defines the PostgreSQL database service.
+#   - `image: postgres:13-alpine`: Specifies the Docker image to use for the database service.
+#   - `volumes:`: Mounts a named volume for persistent database storage.
+#     - `dev-db-data:/var/lib/postgres/data`: Maps the named volume to the PostgreSQL data directory.
+#   - `environment:`: Sets environment variables for PostgreSQL configuration.
+#     - `POSTGRES_DB=devdb`: Specifies the default database name.
+#     - `POSTGRES_USER=devuser`: Specifies the default database username.
+#     - `POSTGRES_PASSWORD=changeme`: Specifies the default database password.
+#
+# - `volumes:`: Defines named volumes for persistent storage.
+#   - `dev-db-data:`: Defines a named volume for PostgreSQL data storage.
 #
 # To build and run the Docker container using this configuration, execute:
 #   docker-compose build  # Builds the Docker image using the defined Dockerfile and configuration.
