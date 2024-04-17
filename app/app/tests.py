@@ -8,6 +8,7 @@ from app import calc
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
+
 class CalcTest(SimpleTestCase):
     """Test the calc module."""
 
