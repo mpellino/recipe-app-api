@@ -9,7 +9,7 @@ from app import calc
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
 
-class CalcTest(SimpleTestCase):
+class CalcTests(SimpleTestCase):
     """Test the calc module."""
 
     def test_add_numbers(self):
@@ -18,7 +18,7 @@ class CalcTest(SimpleTestCase):
 
         self.assertEqual(res, 11)
 
-    def test_subtract_number(self):
+    def test_subtract_numbers(self):
         """Test subtracting numbers."""
         res = calc.subtract(8, 4)
 
