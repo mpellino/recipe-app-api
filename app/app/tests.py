@@ -4,11 +4,9 @@ Sample test
 import os
 
 from django.test import SimpleTestCase
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
-
 from app import calc
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
 class CalcTest(SimpleTestCase):
     """Test the calc module."""
