@@ -7,10 +7,10 @@ from django.urls import reverse
 
 from rest_framework.test import APIClient
 from rest_framework import status
-from rest_framework.authtoken.models import Token
+
 
 CREATE_USER_URL = reverse('user:create') #get the url from the view to create the user
-TOKEN_URL = reverse('token:create') #get the url from the view to create the token
+TOKEN_URL = reverse('user:token') #get the url from the view to create the token
 
 def create_user(**params):
     """Create and return an new user."""
@@ -95,7 +95,7 @@ class pubblicUserApiTest(TestCase):
 
         res = self.client.post(TOKEN_URL, payload)
         
-        self.assertContains('token',res.data)
+        self.assertIn('token',res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
        
 
