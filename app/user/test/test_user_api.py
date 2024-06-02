@@ -11,6 +11,7 @@ from rest_framework import status
 
 CREATE_USER_URL = reverse('user:create') #get the url from the view to create the user
 TOKEN_URL = reverse('user:token') #get the url from the view to create the token
+ME_URL = reverse ('user:me')
 
 def create_user(**params):
     """Create and return an new user."""
@@ -132,3 +133,57 @@ class pubblicUserApiTest(TestCase):
         
         self.assertNotIn('token',res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_authentication_required(self):
+        """Test return anauthorized access if user is not logged in"""
+
+        res = self.client.get(ME_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    class PrivateUserApiTest(TestCase):
+        """Test API requests that required authenticated users"""
+
+        def setUp(self):
+            """method for creating a user"""
+
+            user_details = {
+                'email':'test@example.com',
+                'password': 'test-token-pass123',
+                'name':'Test_name'
+                }
+
+            self.user = create_user(**user_details)
+            self.client = APIClient()
+            self.client.force_authenticate(self.user)
+
+        def test_retreive_profile_sucess(self):
+            """Test retreiving profile for logged user success"""
+
+            res = self.client.get(ME_URL)
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            self.assertEqual(res.data, {
+                'name':self.user.name,
+                'email':self.user.email
+            })
+
+        def post_request_not_allow(self):
+            """TEst post request is not allow for ME_API"""
+
+            res = self.client.post(ME_URL)
+            self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        def test_update_user_profile(self):
+            """Test the API updates the user details"""
+
+            updated_user_details = {
+                'name':'updatred_name',
+                'password':'updated_password'
+            }
+
+            res = self.client.patch(ME_URL, updated_user_details)
+
+            self.user.refresh_from_db()
+
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            self.assertEqual(self.user.name, updated_user_details['name'])
+            self.assertTrue(self.user.check_password(updated_user_details['password']))
