@@ -18,7 +18,7 @@ def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
 
-class pubblicUserApiTest(TestCase):
+class PublicUserApiTests(TestCase):
     """Test the public feature of the API"""
 
     def setUp(self):
@@ -140,10 +140,10 @@ class pubblicUserApiTest(TestCase):
         res = self.client.get(ME_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    class PrivateUserApiTest(TestCase):
+    class PrivateUserApiTests(TestCase):
         """Test API requests that required authenticated users"""
 
-        def setUp(self):
+        def SetUp(self):
             """method for creating a user"""
 
             user_details = {
@@ -166,10 +166,10 @@ class pubblicUserApiTest(TestCase):
                 'email':self.user.email
             })
 
-        def post_request_not_allow(self):
+        def test_post_request_not_allow(self):
             """TEst post request is not allow for ME_API"""
 
-            res = self.client.post(ME_URL)
+            res = self.client.post(ME_URL, {})
             self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
         def test_update_user_profile(self):

@@ -1,12 +1,9 @@
 """
-Sample test
+Sample tests
 """
-import os
-
 from django.test import SimpleTestCase
-from app import calc
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+from app import calc
 
 
 class CalcTests(SimpleTestCase):
@@ -20,6 +17,6 @@ class CalcTests(SimpleTestCase):
 
     def test_subtract_numbers(self):
         """Test subtracting numbers."""
-        res = calc.subtract(8, 4)
+        res = calc.subtract(15, 10)
 
-        self.assertEqual(res, 4)
+        self.assertEqual(res, 5)
