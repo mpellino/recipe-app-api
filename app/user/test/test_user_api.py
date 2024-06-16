@@ -137,7 +137,7 @@ class pubblicUserApiTest(TestCase):
     def test_authentication_required(self):
         """Test return anauthorized access if user is not logged in"""
 
-        res = self.client.get(ME_URL, payload)
+        res = self.client.get(ME_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     class PrivateUserApiTest(TestCase):
