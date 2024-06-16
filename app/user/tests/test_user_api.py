@@ -143,9 +143,8 @@ class PublicUserApiTests(TestCase):
 class PrivateUserApiTests(TestCase):
     """Test API requests that required authenticated users"""
 
-    def SetUp(self):
+    def setUp(self):
         """method for creating a user"""
-
         user_details = {
             'email':'test@example.com',
             'password': 'test-token-pass123',
@@ -176,7 +175,7 @@ class PrivateUserApiTests(TestCase):
         """Test the API updates the user details"""
 
         updated_user_details = {
-            'name':'updatred_name',
+            'name':'updated_name',
             'password':'updated_password'
         }
 
