@@ -140,50 +140,50 @@ class PublicUserApiTests(TestCase):
         res = self.client.get(ME_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    class PrivateUserApiTests(TestCase):
-        """Test API requests that required authenticated users"""
+class PrivateUserApiTests(TestCase):
+    """Test API requests that required authenticated users"""
 
-        def SetUp(self):
-            """method for creating a user"""
+    def SetUp(self):
+        """method for creating a user"""
 
-            user_details = {
-                'email':'test@example.com',
-                'password': 'test-token-pass123',
-                'name':'Test_name'
-                }
-
-            self.user = create_user(**user_details)
-            self.client = APIClient()
-            self.client.force_authenticate(self.user)
-
-        def test_retreive_profile_sucess(self):
-            """Test retreiving profile for logged user success"""
-
-            res = self.client.get(ME_URL)
-            self.assertEqual(res.status_code, status.HTTP_200_OK)
-            self.assertEqual(res.data, {
-                'name':self.user.name,
-                'email':self.user.email
-            })
-
-        def test_post_request_not_allow(self):
-            """TEst post request is not allow for ME_API"""
-
-            res = self.client.post(ME_URL, {})
-            self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-        def test_update_user_profile(self):
-            """Test the API updates the user details"""
-
-            updated_user_details = {
-                'name':'updatred_name',
-                'password':'updated_password'
+        user_details = {
+            'email':'test@example.com',
+            'password': 'test-token-pass123',
+            'name':'Test_name'
             }
 
-            res = self.client.patch(ME_URL, updated_user_details)
+        self.user = create_user(**user_details)
+        self.client = APIClient()
+        self.client.force_authenticate(self.user)
 
-            self.user.refresh_from_db()
+    def test_retreive_profile_success(self):
+        """Test retreiving profile for logged user success"""
 
-            self.assertEqual(res.status_code, status.HTTP_200_OK)
-            self.assertEqual(self.user.name, updated_user_details['name'])
-            self.assertTrue(self.user.check_password(updated_user_details['password']))
+        res = self.client.get(ME_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, {
+            'name':self.user.name,
+            'email':self.user.email
+        })
+
+    def test_post_request_not_allow(self):
+        """TEst post request is not allow for ME_API"""
+
+        res = self.client.post(ME_URL, {})
+        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_update_user_profile(self):
+        """Test the API updates the user details"""
+
+        updated_user_details = {
+            'name':'updatred_name',
+            'password':'updated_password'
+        }
+
+        res = self.client.patch(ME_URL, updated_user_details)
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.user.name, updated_user_details['name'])
+        self.assertTrue(self.user.check_password(updated_user_details['password']))
