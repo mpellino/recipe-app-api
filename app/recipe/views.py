@@ -24,6 +24,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         """Return the serializer class for request"""
-        if self.action == 'list':
-            return serializers.RecipeSerializer
-        return self.serializer_class
+        if self.action == 'list': # In a viewset the "list" action correspond to a get request to the collection of items
+            return serializers.RecipeSerializer # data are serialized using RecipeSerializer
+        return self.serializer_class #return the data serialized wiht the default
