@@ -109,3 +109,20 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.data, serializer.data)
                               
 
+    def test_create_recipe(self):
+        """Test creating recipe."""
+        # here we do not want to create a recipe using the method create_recipe but rather pass a payload to the api
+        payload = {
+            'title': 'Sample recipe',
+            'time_minutes': 30,
+            'price':Decimal(5.99),
+        } # define payload
+
+        res = self.client.post(RECIPES_URL, payload) # make http post request to the url and pass the payload
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED) # check if we get a success response
+
+        recipe = Recipe.objects.get(id=res.data['id']) # we retrieve a specific recepi from the database with the id coming back from the response.
+        for k,v in payload.items():
+            self.assertEqual(getattr(recipe, k),v) # we assert that each value coming back from the response is the actual value in the payload
+        self.assertEqual(recipe.user , self.user)
